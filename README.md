@@ -224,3 +224,163 @@ Se muestra la interfaz en una ventana de hasta 360 px de ancho, comprobando el a
 
 ![Espacio para evidencia de adaptacion responsiva](docs/evidencias/Seccion_9.3.png)
 
+### Seccion 10: Casos de prueba de la etapa basica
+
+- Driver: Jose Manuel Ramos Iglesias
+- Navigator: Uriel Flores Zarate
+- Datos utilizados: 8 testimonios cargados desde `src/data.js`.
+- Objetivo: comprobar el estado inicial, la navegacion ciclica, la seleccion aleatoria, los casos limite, la adaptacion responsiva y la compilacion del proyecto.
+
+#### Matriz de pruebas
+
+| ID | Caso | Procedimiento | Resultado esperado | Resultado |
+| :--- | :--- | :--- | :--- | :---: |
+| P01 | Inicio | Cargar la aplicacion. | Se muestra Ana y el contador indica `Testimonio 1 de 8`. | ✔ |
+| P02 | Siguiente | Desde Ana, presionar `Siguiente`. | Se muestra Luis y el contador cambia a `Testimonio 2 de 8`. | ✔ |
+| P03 | Limite superior | Llegar a Sofia, el testimonio 8, y presionar `Siguiente`. | La navegacion regresa a Ana, posicion 1 de 8, sin error. | ✔ |
+| P04 | Limite inferior | Desde Ana, presionar `Anterior`. | La navegacion llega a Sofia, posicion 8 de 8, sin error. | ✔ |
+| P05 | Aleatorio | Presionar `Aleatorio` desde una posicion valida. | Se selecciona otro registro valido y el contador se actualiza. | ✔ |
+| P06 | Un registro | Sustituir temporalmente el arreglo por un solo objeto. | La tarjeta permanece estable y no se producen errores; los controles no cambian la posicion. | ✔ |
+| P07 | Sin registros | Sustituir temporalmente el arreglo por `[]`. | Se muestra `No hay testimonios disponibles.` y no se renderizan controles. | ✔ |
+| P08 | Ampliacion de datos | Restaurar los datos completos y verificar todos los registros. | La navegacion recorre los 8 testimonios y el contador conserva el rango 1–8. | ✔ |
+| P09 | Presentacion | Probar anchos de 360 px, 760 px y 1280 px; usar teclado y texto largo. | La interfaz se adapta, conserva la legibilidad y muestra el enfoque visible. | ✔ |
+| P10 | Compilacion | Ejecutar `npm run build`. | La compilacion termina correctamente y no reporta errores de aplicacion. | ✔ |
+
+#### P01 y P02: estado inicial y avance
+
+Al cargar la aplicacion se presenta Ana Perez en la primera tarjeta y el contador indica `Testimonio 1 de 8`. Al presionar `Siguiente`, se muestra Luis Garcia y la posicion cambia a `2 de 8`.
+
+![Estado inicial de la aplicacion](docs/evidencias/Seccion_10.1.png)
+
+![Avance al segundo testimonio](docs/evidencias/Seccion_10.2.png)
+
+#### P03 y P04: limites de navegacion
+
+Las pruebas de limite son exitosas porque la navegacion utiliza aritmetica modular:
+
+- En el ultimo registro, `(actual + 1) % total` devuelve el indice `0` y regresa al primer testimonio.
+- En el primer registro, `(actual - 1 + total) % total` devuelve el ultimo indice y regresa al octavo testimonio.
+
+#### P05: seleccion aleatoria
+
+La funcion `random` evita seleccionar el registro actual cuando existen dos o mas testimonios. Calcula un desplazamiento entre `1` y `total - 1`, lo suma al indice vigente y aplica el modulo del total. Por ello, el nuevo indice siempre es valido y diferente del anterior.
+
+#### P06: coleccion con un registro
+
+Para comprobar el caso limite se puede usar temporalmente este contenido en `src/data.js`:
+
+```javascript
+const testimonios = [
+  {
+    id: 1,
+    nombre: 'Ana Perez',
+    cargo: 'Direccion',
+    texto: 'La herramienta facilita organizar nuestras tareas.',
+    foto: '/fotos/ana.jpg',
+  },
+];
+
+export default testimonios;
+```
+
+La tarjeta se mantiene visible sin errores. `Siguiente` y `Anterior` conservan el indice `1`.
+
+![Evidencia de un solo registro](docs/evidencias/Seccion_10.6.png)
+
+#### P07: coleccion vacia
+
+Al cambiar temporalmente el arreglo por `[]`, muestra el mensaje `No hay testimonios disponibles.` y evita renderizar una tarjeta o controles que no tendrian datos validos.
+
+![Evidencia de coleccion vacia](docs/evidencias/Seccion_10.7.png)
+
+#### P08: ampliacion y restauracion de datos
+
+Al restaurar los 8 objetos de `src/data.js`, el contador comienza en `Testimonio 1 de 8` y se mantiene dentro del rango durante los recorridos hacia adelante, hacia atras y aleatorios.
+
+![Evidencia de los ocho testimonios](docs/evidencias/Seccion_10.8.png)
+
+#### P09: presentacion responsiva y teclado
+
+Se verifico la interfaz en tres tamaños de ventana:
+
+- **360 x 760 px:** se aplica el espaciado reducido de la tarjeta.
+- **760 x 760 px:** la tarjeta conserva una lectura comoda y los controles permanecen alineados.
+- **1280 x 760 px:** el contenido se mantiene centrado dentro del ancho maximo de 560 px.
+- **Teclado:** los botones reciben el foco en orden.
+
+![Interfaz a 360 x 760 px](docs/evidencias/Seccion_10.9.1.png)
+
+![Interfaz a 760 x 760 px](docs/evidencias/Seccion_10.9.2.png)
+
+![Interfaz a 1280 x 760 px](docs/evidencias/Seccion_10.9.3.png)
+
+#### P10: compilacion
+
+Se ejecuto `npm run build` para comprobar que la aplicacion puede transformarse en una compilacion de produccion sin errores.
+
+![Resultado de la compilacion](docs/evidencias/Seccion_10.10.png)
+
+#### Evidencias de comprension
+
+Estas evidencias complementan los casos de prueba y demuestran la comprension de componentes, props y estado. Se mantienen separadas de cualquier prueba de autoplay; la aplicacion actual se prueba mediante interaccion manual con los controles.
+
+##### Flujo de informacion entre App y sus hijos
+
+```text
+src/data.js
+    |
+    v
+App.jsx
+  |  item={testimonios[index]}
+  +-----------------------> Testimonial.jsx
+  |                           Renderiza foto, nombre, cargo y texto
+  |
+  +-- onPrev={prev} -------> Controls.jsx
+  +-- onNext={next} -------> Controls.jsx
+  +-- onRandom={random} ---> Controls.jsx
+                              Ejecuta el callback del boton
+```
+
+- `src/data.js` exporta el arreglo de testimonios.
+- `App.jsx` importa los datos, conserva `index` con `useState` y selecciona el testimonio activo.
+- `App.jsx` envia el objeto seleccionado a `Testimonial.jsx` mediante la prop `item`.
+- `App.jsx` envia las funciones `prev`, `next` y `random` a `Controls.jsx` mediante props.
+- `Controls.jsx` no modifica directamente el estado; ejecuta el callback recibido.
+- `Testimonial.jsx` recibe `item` y muestra sus propiedades.
+
+##### Recorrido de clic, callback, estado y DOM
+
+Al presionar `Siguiente`, el flujo es:
+
+```text
+clic en "Siguiente"
+  -> Controls ejecuta onNext
+  -> App recibe la llamada en next
+  -> setIndex(actual => (actual + 1) % total)
+  -> React actualiza el estado
+  -> App se renderiza nuevamente
+  -> Testimonial recibe otro item
+  -> React confirma los cambios en el DOM
+```
+
+##### Control del limite del indice
+
+No se utiliza `testimonios[index + 1]` sin limite porque, al llegar al ultimo elemento, se intentaria leer una posicion inexistente. La expresion `(actual + 1) % total` regresa al indice `0`; de forma equivalente, `(actual - 1 + total) % total` permite retroceder desde el primer elemento hasta el ultimo.
+
+La funcion aleatoria aplica la misma proteccion: calcula un desplazamiento distinto de cero y despues aplica `% total`, por lo que siempre obtiene un indice valido y diferente del actual cuando existen al menos dos registros.
+
+##### Error identificado y comprobacion de la solucion
+
+Se identifico el riesgo de perder la navegacion al superar el ultimo indice. Se corrigio utilizando actualizaciones funcionales y aritmetica modular:
+
+```jsx
+function next() {
+  setIndex(actual => (actual + 1) % total);
+}
+
+function prev() {
+  setIndex(actual => (actual - 1 + total) % total);
+}
+```
+
+La solucion se comprobo recorriendo desde la primera posicion hacia atras y desde la ultima hacia adelante. Tambien se verificaron las colecciones de un elemento y vacia para confirmar que no aparecieran errores visibles.
