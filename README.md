@@ -23,17 +23,30 @@ TecNM en Celaya
 - `npm run preview`: Previsualiza localmente la compilacion.
 - `npm run lint`: Ejecuta el analisis estatico con oxlint.
 
-## Seccion 1 a 4: Entorno e inicializacion con Vite
+## Registro de avance
+
+### Seccion 1 a 4: Entorno e inicializacion con Vite
 
 - Driver: Uriel Flores Zarate
 - Navigator: Jose Manuel Ramos Iglesias
-
 - Acciones:
   - Verificacion de versiones de Node.js (v24.11.1) y npm (11.6.2).
   - Creacion del proyecto con plantilla React de Vite.
   - Instalacion de dependencias y verificacion de compilacion inicial con `npm run build`.
 
-## Preguntas y comprobaciones de la guia
+### Seccion 5: Estructura y recorrido de la aplicacion
+
+- Driver: Uriel Flores Zarate
+- Navigator: Jose Manuel Ramos Iglesias
+- Acciones:
+  - Se estructuro el arbol de directorios segun el esquema de la practica (Figura 1), separando los componentes en `src/components/` y centralizando los estilos globales en `src/styles.css`.
+  - Se configuro `public/fotos/` con 8 retratos en formato cuadrado (200x200 px con enfoque facial) para disponer de recursos locales sin depender de conectividad externa ni proveedores remotos.
+  - Se prepararon los cascarones iniciales para `Testimonial.jsx`, `Controls.jsx` y el modulo `data.js`.
+  - Se unifico el punto de entrada en `src/main.jsx`, encargandose de montar `App` dentro del nodo contenedor `#root` e importar `styles.css` una sola vez.
+
+![Estructura de la aplicacion](docs/evidencias/Seccion_5.png)
+
+## Preguntas de la practica
 
 ### Seccion 3: Comprobacion previa (JavaScript)
 
