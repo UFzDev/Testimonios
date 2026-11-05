@@ -191,3 +191,36 @@ En esta captura se observa el resultado de presionar `Aleatorio`, seleccionando 
 En esta captura se demuestra la navegacion en reversa con el boton `Anterior`, retrocediendo de la posicion 7 a la posicion 6 de 8 (Javier Ramos):
 
 ![Retroceder al testimonio anterior](docs/evidencias/Seccion_8_retroceder.png)
+
+### Seccion 9: Estilos y accesibilidad basica
+
+- Driver: Jose Manuel Ramos Iglesias
+- Navigator: Uriel Flores Zarate
+
+- Acciones:
+  - Se aplicaron los estilos globales definidos en `src/css/styles.css`, estableciendo una tipografia del sistema, colores con contraste, fondo claro y un contenedor centrado con ancho maximo de 560 px.
+  - Se diseño la tarjeta de testimonio con fondo blanco, bordes redondeados, sombra, espaciado interno y ajuste de palabras para evitar desbordamientos en textos extensos.
+  - Se dio formato circular a las fotografias mediante `border-radius: 50%` y `object-fit: cover`, conservando una presentacion uniforme para todos los testimonios.
+  - Se organizaron los controles con `display: flex`, `flex-wrap: wrap` y separacion entre botones para conservar su legibilidad en pantallas reducidas.
+  - Se establecio una altura minima de 44 px para los botones, un estado visual al pasar el cursor y un indicador visible de enfoque con `:focus-visible`, facilitando la navegacion con teclado.
+  - Se agrego un ajuste responsivo con `@media (max-width: 360px)` para reducir el espaciado de la tarjeta en dispositivos pequenos.
+  - Se conservaron elementos semanticos y accesibles: `main`, `article`, `h1`, `blockquote`, texto alternativo descriptivo en las fotografias y `aria-live="polite"` para anunciar el cambio de posicion sin interrumpir al usuario.
+
+#### Evidencia visual de los estilos
+
+En esta captura debe mostrarse la aplicacion completa con la tarjeta de testimonio, la fotografia circular, los botones y el contador de posicion:
+
+![Espacio para evidencia visual de los estilos](docs/evidencias/Seccion_9.1.png)
+
+#### Evidencia de accesibilidad y enfoque
+
+Se muestra uno de los botones seleccionado mediante el teclado, con el contorno visible generado por `button:focus-visible`:
+
+![Espacio para evidencia de accesibilidad y enfoque](docs/evidencias/Seccion_9.2.png)
+
+#### Evidencia de adaptacion responsiva
+
+Se muestra la interfaz en una ventana de hasta 360 px de ancho, comprobando el ajuste del espaciado de la tarjeta y el acomodo de los botones:
+
+![Espacio para evidencia de adaptacion responsiva](docs/evidencias/Seccion_9.3.png)
+
