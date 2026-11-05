@@ -51,6 +51,8 @@ TecNM en Celaya
   - Se prepararon los cascarones iniciales para `Testimonial.jsx`, `Controls.jsx` y el modulo `data.js`.
   - Se unifico el punto de entrada en `src/main.jsx`, encargandose de montar `App` dentro del nodo contenedor `#root` e importar `styles.css` una sola vez.
 
+En la siguiente captura se observa la estructura de archivos en el explorador del proyecto, cumpliendo con la separacion entre componentes, fuentes de datos, recursos estaticos y configuracion:
+
 ![Estructura de la aplicacion](docs/evidencias/Seccion_5.png)
 
 ### Seccion 6: Datos y componente de presentacion
@@ -101,7 +103,6 @@ export default function Testimonial({ item }) {
 ```
 
 ### Seccion 7: Montaje y primera tarjeta estatica
-
 - Driver: Uriel Flores Zarate
 - Navigator: Jose Manuel Ramos Iglesias
 - Acciones:
@@ -123,7 +124,12 @@ export default function App() {
 
 - Se comprobo el funcionamiento del renderizado estatico y el flujo unidireccional de datos pasando inicialmente `testimonios[0]` (Ana Perez) y posteriormente intercambiando el indice por `testimonios[1]` (Luis Garcia) para verificar la reactividad ante el cambio de props.
 
+En esta captura se muestra el montaje inicial de la primera tarjeta estatica renderizando a Ana Perez desde la posicion 0 del arreglo:
+
 ![Testimonio en posicion 0](docs/evidencias/Seccion_7.1.png)
+
+En esta captura se verifica la actualizacion de la interfaz al modificar manualmente la prop a la posicion 1 del arreglo, mostrando ahora a Luis Garcia:
+
 ![Testimonio en posicion 1](docs/evidencias/Seccion_7.2.png)
 
 #### Detente y explica
@@ -136,3 +142,52 @@ export default function App() {
   `src/main.jsx` es el punto de entrada de la aplicacion que conecta React con el DOM del navegador mediante `createRoot` sobre el elemento `#root`. `src/App.jsx` es el componente raiz de la jerarquia de React que define la logica, la estructura general y la coordinacion de los componentes visuales.
 - **¿Que tendrias que copiar si no existiera el componente `Testimonial`?**:
   Habria que duplicar manualmente en cada lugar todo el bloque de marcado JSX (`<article>`, `<img>`, `<h2>`, `<p>`, `<blockquote>`) y las operaciones de acceso a las propiedades del objeto, dificultando el mantenimiento y aumentando la redundancia del codigo.
+
+### Seccion 8: Controles y estado de navegacion
+- Driver: Uriel Flores Zarate
+- Navigator: Jose Manuel Ramos Iglesias
+- Acciones:
+  - Se implemento el componente `src/components/Controls.jsx` con tres botones accesibles que comunican eventos al componente superior a traves de callbacks (`onPrev`, `onNext`, `onRandom`).
+  - Se integro el hook `useState(0)` en `src/App.jsx` para gestionar el indice del testimonio activo.
+  - Se aplicaron actualizaciones de estado funcionales (`setIndex(actual => ...)`) con aritmetica modular para garantizar navegacion ciclica: `(actual + 1) % total` para avanzar y `(actual - 1 + total) % total` para retroceder.
+  - Se diseño el algoritmo de seleccion aleatoria calculando un desplazamiento `salto = 1 + Math.floor(Math.random() * (total - 1))`, asegurando que al existir dos o mas registros nunca se seleccione el testimonio actualmente visible.
+  - Se incluyo una clausula de guardia para colecciones vacias (`total === 0`) y un contador de posicion accesible con `aria-live="polite"`.
+
+```jsx
+export default function Controls({ onPrev, onNext, onRandom }) {
+  return (
+    <div className="controls">
+      <button type="button" onClick={onPrev}>Anterior</button>
+      <button type="button" onClick={onNext}>Siguiente</button>
+      <button type="button" onClick={onRandom}>Aleatorio</button>
+    </div>
+  );
+}
+```
+
+#### Traza obligatoria con tres registros
+
+| Accion | Indice antes | Indice despues | Posicion visible |
+| :--- | :---: | :---: | :---: |
+| Inicio | — | 0 | 1 de 3 |
+| Siguiente | 0 | 1 | 2 de 3 |
+| Siguiente | 2 | 0 | 1 de 3 |
+| Anterior | 0 | 2 | 3 de 3 |
+
+#### Evidencias de navegacion e interaccion
+
+En esta captura se aprecian los tres botones de control (`Anterior`, `Siguiente`, `Aleatorio`) y el contador de posicion reflejando el estado inicial con el testimonio 1 de 8:
+
+![Botones de controles y estado inicial](docs/evidencias/Seccion_8.1.png)
+
+En esta captura se evidencia el funcionamiento del boton `Siguiente`, pasando del primer registro al testimonio 2 de 8 (Luis Garcia):
+
+![Avanzar al siguiente testimonio](docs/evidencias/Seccion_8_avanzar.png)
+
+En esta captura se observa el resultado de presionar `Aleatorio`, seleccionando un registro completamente distinto al actual (testimonio 7 de 8, Sofia Castro):
+
+![Seleccion aleatoria distinta del actual](docs/evidencias/Seccion_8_aleatorio.png)
+
+En esta captura se demuestra la navegacion en reversa con el boton `Anterior`, retrocediendo de la posicion 7 a la posicion 6 de 8 (Javier Ramos):
+
+![Retroceder al testimonio anterior](docs/evidencias/Seccion_8_retroceder.png)
