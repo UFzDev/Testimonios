@@ -4,19 +4,16 @@ Ingenieria de Software · Unidad 3 · Periodo AGO–DIC 2026
 TecNM en Celaya
 
 ## Integrantes
-
 - Uriel Flores Zarate
 - Jose Manuel Ramos Iglesias
 
 ## Entorno de desarrollo
-
 - Node.js: v24.11.1
 - npm: 11.6.2
 - Vite: 8.3.5
 - React: 19.3.1
 
 ## Scripts disponibles
-
 - `npm install`: Instala las dependencias del proyecto.
 - `npm run dev`: Inicia el servidor de desarrollo local.
 - `npm run build`: Genera la compilacion de produccion en dist/.
@@ -26,7 +23,6 @@ TecNM en Celaya
 ## Registro de avance
 
 ### Seccion 1 a 4: Entorno e inicializacion con Vite
-
 - Driver: Uriel Flores Zarate
 - Navigator: Jose Manuel Ramos Iglesias
 - Acciones:
@@ -35,18 +31,63 @@ TecNM en Celaya
   - Instalacion de dependencias y verificacion de compilacion inicial con `npm run build`.
 
 ### Seccion 5: Estructura y recorrido de la aplicacion
-
 - Driver: Uriel Flores Zarate
 - Navigator: Jose Manuel Ramos Iglesias
 - Acciones:
-  - Se estructuro el arbol de directorios segun el esquema de la practica (Figura 1), separando los componentes en `src/components/` y centralizando los estilos globales en `src/styles.css`.
+  - Se estructuro el arbol de directorios segun el esquema de la guia (Figura 1), separando los componentes en `src/components/` y centralizando los estilos globales en `src/styles.css`.
   - Se configuro `public/fotos/` con 8 retratos en formato cuadrado (200x200 px con enfoque facial) para disponer de recursos locales sin depender de conectividad externa ni proveedores remotos.
   - Se prepararon los cascarones iniciales para `Testimonial.jsx`, `Controls.jsx` y el modulo `data.js`.
   - Se unifico el punto de entrada en `src/main.jsx`, encargandose de montar `App` dentro del nodo contenedor `#root` e importar `styles.css` una sola vez.
 
 ![Estructura de la aplicacion](docs/evidencias/Seccion_5.png)
 
-## Preguntas de la practica
+### Seccion 6: Datos y componente de presentacion
+- Driver: Uriel Flores Zarate
+- Navigator: Jose Manuel Ramos Iglesias
+- Acciones:
+  - Se definio el modulo `src/data.js` como un modulo nativo de JavaScript (`export default`) que contiene un arreglo con 8 objetos estructurados, vinculando cada registro a su respectiva imagen local en `/fotos/`:
+
+```javascript
+const testimonios = [
+  {
+    id: 1,
+    nombre: 'Ana Pérez',
+    cargo: 'Dirección',
+    texto: 'La herramienta facilita organizar nuestras tareas.',
+    foto: '/fotos/ana.jpg'
+  },
+  // ... 7 registros adicionales con id unico del 2 al 8
+];
+
+export default testimonios;
+```
+
+  - Se construyo el componente de presentacion `src/components/Testimonial.jsx`, el cual recibe el testimonio individual a traves de la prop `item`. Aplica desestructuracion limpia y genera marcado semantico accesible con texto alternativo contextual:
+
+```jsx
+export default function Testimonial({ item }) {
+  if (!item) return null;
+
+  const { nombre, cargo, texto, foto } = item;
+
+  return (
+    <article className="testimonial-card">
+      <img
+        className="testimonial-photo"
+        src={foto}
+        alt={`Retrato ilustrativo de ${nombre}`}
+        width="90"
+        height="90"
+      />
+      <h2>{nombre}</h2>
+      <p className="testimonial-role">{cargo}</p>
+      <blockquote>{texto}</blockquote>
+    </article>
+  );
+}
+```
+
+## Preguntas y comprobaciones de la guia
 
 ### Seccion 3: Comprobacion previa (JavaScript)
 
