@@ -485,4 +485,36 @@ Uriel Flores Zarate
 - **¿Por qué no existe un Hook llamado `render`?** React controla el renderizado automáticamente cuando cambian las props o el estado; no es una tarea que el componente deba iniciar mediante un Hook.
 - **¿Qué cambiaría si el arreglo llegara de una API y pudiera actualizarse?** Habría que controlar la carga y los errores, almacenar la respuesta en estado y actualizar el índice si los nuevos datos ya no contienen el testimonio actual.
 
-### Seccion 12: Ampliación con reproducción automática
+### Seccion 12: Experimento de reutilización y productividad
+
+Se reutilizó `Testimonial` para mostrar dos tarjetas adicionales dentro de una sección accesible, sin duplicar la estructura HTML de cada testimonio. La navegación principal se conserva y ambas tarjetas reciben el mismo cambio visual aplicado a `.testimonial-card`.
+
+#### Cambios realizados
+
+- En `src/App.jsx` se agregó una sección con `aria-label="Ejemplos de testimonios"`.
+- Se agregaron dos tarjetas adicionales reutilizando el componente `Testimonial`.
+- Las tarjetas adicionales se muestran únicamente cuando existen al menos dos testimonios.
+- Se conservaron la navegación, los controles y la reproducción automática existentes.
+- En `src/css/styles.css` se agregó un borde de `2px solid #d5e4ef` a `.testimonial-card`.
+
+#### Resultado.
+
+![alt text](docs/evidencias/Seccion_12.png)
+
+#### Reflexión individual breve
+
+José Manuel Ramos Iglesias
+
+- Se reutilizó el componente `Testimonial` en lugar de duplicar su marcado.
+- React actualiza el árbol de componentes, evitando manipular varios nodos del DOM manualmente.
+- La organización depende de separar datos, presentación y navegación en archivos y componentes distintos.
+- En una aplicación pequeña, React puede agregar configuración y dependencias frente a modificar el DOM directamente.
+- Todavía no comprendo completamente cómo React decide qué partes del DOM debe actualizar cuando dos componentes reutilizados reciben datos diferentes. **Pregunta concreta:** ¿Cómo determina React que debe actualizar solo el contenido que cambió en cada tarjeta?
+
+Uriel Flores Zarate
+
+- Se reutilizó `Testimonial` para renderizar el testimonio actual y los dos ejemplos adicionales, evitando copiar la estructura de imagen, nombre, cargo y texto.
+- A diferencia de modificar nodos del DOM manualmente, React permite actualizar la interfaz cambiando los datos que reciben los componentes.
+- El diseño separa la navegación en `App`, la presentación en `Testimonial` y los estilos en `styles.css`; React coordina el renderizado cuando cambian los datos o el estado.
+- En una aplicación pequeña, configurar React y mantener varios archivos puede ser más trabajo que usar HTML y JavaScript directo.
+- Todavía no comprendo completamente cómo se organiza una lista dinámica de componentes reutilizados. **Pregunta concreta:** ¿Por qué es necesaria una propiedad `key` estable cuando se muestran varios testimonios con `map`?
