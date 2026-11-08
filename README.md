@@ -384,3 +384,105 @@ function prev() {
 ```
 
 La solucion se comprobo recorriendo desde la primera posicion hacia atras y desde la ultima hacia adelante. Tambien se verificaron las colecciones de un elemento y vacia para confirmar que no aparecieran errores visibles.
+
+### Seccion 11: Ampliación con reproducción automática
+Se realizaron los cambios dentro de App.jsx
+
+```jsx
+  const [reproduciendo, setReproduciendo] = useState(false);
+
+  useEffect(() => {
+    if (!reproduciendo || total < 2) return;
+
+    const intervalo = setInterval(() => {
+      setIndex(actual => (actual + 1) % total);
+    }, 5000);
+
+    return () => clearInterval(intervalo);
+  }, [reproduciendo, total]);
+
+  function navegar(accion) {
+    setReproduciendo(false);
+    accion();
+  }
+```
+
+Cambios realizados
+
+```jsx
+  return (
+    <main className="app">
+      <h1>Experiencias de nuestros usuarios</h1>
+      <Testimonial item={testimonios[index]} />
+
+      // ------------------------------- //
+      <Controls
+        onPrev={() => navegar(prev)}
+        onNext={() => navegar(next)}
+        onRandom={() => navegar(random)}
+      />
+      {total > 1 && (
+        <div class="controls">
+          <button
+            type="button"
+            onClick={() => setReproduciendo(actual => !actual)}
+          >
+            {reproduciendo ? 'Pausar' : 'Reanudar'}
+          </button>
+        </div>
+      )}
+      <p className="counter">
+        Testimonio {index + 1} de {total}
+      </p>
+      // ------------------------------ //
+    </main>
+  );
+```
+
+#### Comprender y verificar el efecto
+
+#### A01: Activación
+Esperado: Reanudar inicia avances separados aproximadamente cinco segundos.
+Comprobado: al presionar el botón Reanudar, después de cinco segundos cambia el testimonio. El avance continúa hasta el último registro y vuelve a iniciar desde el primero.
+
+#### A02: Pausa
+Esperado: Pausar mantiene el testimonio aunque transcurran más de cinco segundos.
+Comprobado: al presionar el botón Pausar, el testimonio permanece sin cambios después de esperar más de cinco segundos.
+
+#### A03: Acción manual
+Esperado: Anterior, Siguiente o Aleatorio cambian la tarjeta y dejan pausada la reproducción.
+Comprobado: los tres botones cambian la tarjeta según su acción y detienen la reproducción automática, sin acelerar ni alterar su comportamiento al repetir la operación.
+
+#### A04 Reanudación
+Esperado: Reanudar permite nuevos avances; repetir varias veces sin aceleración.  
+Comprobado: cada activación cambia `reproduciendo` y el efecto crea un único intervalo para ese estado. Al pausar y reanudar, el contador continúa avanzando normalmente sin acelerarse.
+
+#### A05 Límites Durante autoplay, el último vuelve al primero.
+Esperado: Durante autoplay, el último vuelve al primero.
+Comprobado: el avance automático utiliza `(actual + 1) % total`, por lo que después del último testimonio regresa al primero.
+
+#### A06 Pocos datos
+Esperado: Con cero o un registro no se crea un intervalo.
+Comprobado: la condición `total < 2` impide crear el intervalo cuando hay cero o un solo registro.
+
+#### A07 Limpieza
+Esperado: Revisar el return del efecto y comprobar que no aparecen intervalos acumulados al alternar pausa y reproducción.
+Comprobado: el efecto devuelve `clearInterval(intervalo)`. React ejecuta esta limpieza cuando se pausa la reproducción o cambia alguna dependencia, evitando intervalos acumulados al alternar el botón.
+
+#### Preguntas individuales
+
+José Manuel Ramos Iglesias
+
+- **¿Por qué el temporizador se maneja con un efecto y el clic con un evento?** El temporizador depende del estado y debe configurarse o limpiarse cuando este cambia; el clic ocurre como respuesta directa a una acción del usuario.
+- **¿Qué problema evita `clearInterval`?** Evita que queden temporizadores activos al pausar o cambiar de estado, previniendo avances duplicados.
+- **¿Por qué no existe un Hook llamado `render`?** Renderizar es una responsabilidad interna de React; los Hooks se usan para manejar estado, efectos y otros comportamientos dentro del componente.
+- **¿Qué cambiaría si el arreglo llegara de una API y pudiera actualizarse?** Se necesitaría cargar los datos con un efecto, guardarlos en estado y reiniciar o ajustar el índice y el temporizador cuando cambie la cantidad de testimonios.
+
+Uriel Flores Zarate
+
+- **¿Por qué el temporizador se maneja con un efecto y el clic con un evento?** El efecto coordina una tarea que ocurre con el paso del tiempo, mientras que el evento responde inmediatamente a la interacción del usuario.
+- **¿Qué problema evita `clearInterval`?** Evita que se acumulen varios temporizadores y que los testimonios avancen más rápido de lo esperado.
+- **¿Por qué no existe un Hook llamado `render`?** React controla el renderizado automáticamente cuando cambian las props o el estado; no es una tarea que el componente deba iniciar mediante un Hook.
+- **¿Qué cambiaría si el arreglo llegara de una API y pudiera actualizarse?** Habría que controlar la carga y los errores, almacenar la respuesta en estado y actualizar el índice si los nuevos datos ya no contienen el testimonio actual.
+
+### Seccion 12: Ampliación con reproducción automática
