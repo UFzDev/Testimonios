@@ -518,3 +518,17 @@ Uriel Flores Zarate
 - El diseño separa la navegación en `App`, la presentación en `Testimonial` y los estilos en `styles.css`; React coordina el renderizado cuando cambian los datos o el estado.
 - En una aplicación pequeña, configurar React y mantener varios archivos puede ser más trabajo que usar HTML y JavaScript directo.
 - Todavía no comprendo completamente cómo se organiza una lista dinámica de componentes reutilizados. **Pregunta concreta:** ¿Por qué es necesaria una propiedad `key` estable cuando se muestran varios testimonios con `map`?
+
+
+### Tablero de trabajo (Scrum / Kanban)
+
+Durante el desarrollo del proyecto se empleo un tablero Kanban en GitHub Projects para organizar y dar seguimiento a las tareas del equipo segun los criterios de Scrum y Extreme Programming. Las historias se descompusieron en tareas tecnicas que transitaron por las columnas de Pendiente, En proceso, En revision y Terminado a medida que se completaban y verificaban con sus respectivos commits.
+
+![Tablero Kanban en GitHub Projects](docs/evidencias/Tablero_Kanban.png)
+
+
+### Tablero de trabajo (Scrum / Kanban)
+
+Durante el desarrollo del proyecto se empleo un tablero Kanban en GitHub Projects para organizar y dar seguimiento a las tareas del equipo segun los criterios de Scrum y Extreme Programming. Las historias se descompusieron en tareas tecnicas que transitaron por las columnas de Pendiente, En proceso, En revision y Terminado a medida que se completaban y verificaban con sus respectivos commits.
+
+![Tablero Kanban en GitHub Projects](docs/evidencias/Tablero_Kanban.png)
