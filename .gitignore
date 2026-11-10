@@ -25,3 +25,11 @@ dist-ssr
 
 # Guía y documentos de referencia interna
 practica.md
+guia-practica.md
+docs/tablero-kanban-issues.md
+
+# Documentos académicos generados y assets de reporte
+docs/Lab_U3-03_Practica_React.pdf
+docs/logo_itc.svg
+docs/reporte_react_practica.html
+docs/reporte_react_practica.md

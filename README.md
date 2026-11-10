@@ -23,6 +23,11 @@ TecNM en Celaya
 - `npm run preview`: Previsualiza localmente la compilacion.
 - `npm run lint`: Ejecuta el analisis estatico con oxlint.
 
+## Despliegue en Produccion
+
+La aplicacion se encuentra desplegada y disponible para su consulta publica en:
+- **URL**: [https://testimonios-o28.pages.dev/](https://testimonios-o28.pages.dev/)
+
 ## Registro de avance
 
 ### Seccion 1 a 4: Entorno e inicializacion con Vite
@@ -526,9 +531,26 @@ Durante el desarrollo del proyecto se empleo un tablero Kanban en GitHub Project
 
 ![Tablero Kanban en GitHub Projects](docs/evidencias/Tablero_Kanban.png)
 
+### Revision por pares (Peer Review)
 
-### Tablero de trabajo (Scrum / Kanban)
+- **Equipo evaluador**: Javier Alexander Martinez Flores y Clara Paulina Hernandez Lopez
+- **Equipo evaluado**: Uriel Flores Zarate y Jose Manuel Ramos Iglesias
+- **Fecha de revision**: 9 de noviembre de 2026
+- **Entorno evaluado**: Local (`npm run dev`) y produccion en [https://testimonios-o28.pages.dev/](https://testimonios-o28.pages.dev/)
+- **Dictamen global**: Aprobado (Cumple con los criterios de aceptacion de la etapa basica y la ampliacion)
 
-Durante el desarrollo del proyecto se empleo un tablero Kanban en GitHub Projects para organizar y dar seguimiento a las tareas del equipo segun los criterios de Scrum y Extreme Programming. Las historias se descompusieron en tareas tecnicas que transitaron por las columnas de Pendiente, En proceso, En revision y Terminado a medida que se completaban y verificaban con sus respectivos commits.
+#### Evaluacion
 
-![Tablero Kanban en GitHub Projects](docs/evidencias/Tablero_Kanban.png)
+Durante la sesion de revision cruzada ejecutamos la aplicacion en su version desplegada en produccion ([https://testimonios-o28.pages.dev/](https://testimonios-o28.pages.dev/)) y en entorno local (`npm run dev`), analizando el codigo fuente de los componentes en `src/`. Comprobamos que la arquitectura respeta la separacion estricta de responsabilidades: `Testimonial.jsx` actua como un componente puramente presentacional desacoplado del origen de los datos, mientras que `Controls.jsx` comunica las intenciones de navegacion mediante callbacks limpios hacia el componente raiz `App.jsx`, el cual centraliza correctamente el estado de la posicion activa.
+
+Probamos la navegacion en ambos sentidos confirmando que la operacion modular ciclica resuelve adecuadamente los extremos (del primer testimonio al ultimo y viceversa) sin producir indices negativos ni lecturas de propiedades indefinidas. La seleccion aleatoria demostro descartar exitosamente el testimonio visible cuando existen dos o mas elementos. Asimismo, forzamos los escenarios limite de la guia dejando un solo registro y un arreglo vacio (`[]`), verificando que la interfaz responde de forma controlada con el mensaje preventivo sin arrojar excepciones en la consola del navegador.
+
+En el aspecto de accesibilidad e interfaz, navegamos la aplicacion utilizando exclusivamente el teclado (Tab y Enter), observando que los controles conservan un foco visible bien contrastado mediante `:focus-visible` y cumplen con la dimension ergonomica minima de 44 px. La tarjeta de testimonio mantiene su legibilidad y ajuste sin desbordamiento horizontal al redimensionar la ventana a 360 px, 768 px y 1280 px.
+
+Respecto a la ampliacion de reproduccion automatica con `useEffect`, confirmamos que el temporizador de 5 segundos se pausa al interactuar manualmente con cualquiera de los botones de navegacion y que el retorno de limpieza con `clearInterval` evita la acumulacion descontrolada de intervalos al alternar los estados de pausa y reanudacion, incluso bajo las comprobaciones estrictas de `StrictMode`.
+
+#### Observaciones y sugerencias de mejora
+
+1. **Retorno de la interfaz al estado de produccion**: Se observo que dentro de `src/App.jsx` aun se conservan montadas las dos tarjetas estaticas correspondientes al experimento de la Seccion 12 (`aria-label="Ejemplos de testimonios"`). Como sugerencia de entrega final, recomendamos retirar o comentar dicho bloque para que la vista principal muestre unicamente el carrusel interactivo activo solicitado en los criterios de aceptacion.
+2. **Soporte para navegacion por flechas del teclado**: Aunque los botones son accesibles mediante el tabulador, anadir un escuchador de eventos de teclado global (`keydown` para `ArrowLeft` y `ArrowRight`) mejoraria significativamente la experiencia de usuario en equipos de escritorio.
+3. **Manejo asincrono futuro**: Si en una fase posterior los datos dejaran de ser estaticos y se consumieran desde una API externa, convendria anadir estados visuales de carga (*skeleton* o indicador de carga) y captura de errores de red antes de montar la tarjeta.
